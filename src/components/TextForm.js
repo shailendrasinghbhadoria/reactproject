@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 export default function TextForm(props) {
     const [text, setText] = useState('');
     const handleOnChange = (event) =>{
-        console.log(text);
+        //console.log(text);
         setText(event.target.value);
     }
     const handleOnClick = (event) =>{
@@ -30,6 +30,7 @@ export default function TextForm(props) {
         let text = document.querySelector('#textarea');
         text.select();
         navigator.clipboard.writeText(text.value);
+        document.getSelection().removeAllRanges();
         props.showAlert('Text is copied to clipboard Succesfully', 'success')
     }
     const handleremovespace = (event) =>{      
@@ -48,19 +49,19 @@ export default function TextForm(props) {
                 <textarea rows="8" id="textarea" value={text} onChange={handleOnChange}></textarea>              
 
             </div>
-            <button className='btn btn-primary mx-1' onClick={handleOnClick}>Convert to Uppercase</button>
-            <button className='btn btn-primary mx-1' onClick={handleClickLower}>Convert to Lowercase</button>
-            <button className='btn btn-primary mx-1' onClick={handleCopy}>Copy Text</button>
-            <button className='btn btn-primary mx-1' onClick={handleClearr}>Clear</button>
-            <button className='btn btn-primary mx-1' onClick={handleremovespace}>Remove Space</button>
+            <button disabled={text.length===0} className='btn btn-primary mx-1 my-1' onClick={handleOnClick}>Convert to Uppercase</button>
+            <button disabled={text.length===0} className='btn btn-primary mx-1 my-1' onClick={handleClickLower}>Convert to Lowercase</button>
+            <button disabled={text.length===0} className='btn btn-primary mx-1 my-1' onClick={handleCopy}>Copy Text</button>
+            <button disabled={text.length===0} className='btn btn-primary mx-1 my-1' onClick={handleClearr}>Clear</button>
+            <button disabled={text.length===0} className='btn btn-primary mx-1 my-1' onClick={handleremovespace}>Remove Space</button>
             
         </div>
         <div className={`container my-3 text-${props.mode=='light'? 'dark':'light'}`}>
         <h1>Your text Summary</h1>
-        <p>{text.split(' ').length} words and {text.length} characters</p>
-        <p>{0.008*text.split('').length} Minutes to read</p>
+        <p>{text.split(' ').filter((element)=>{return element.length!==0}).length} words and {text.length} characters</p>
+        <p>{0.008*text.split(' ').filter((element)=>{return element.length!==0}).length} Minutes to read</p>
         <h2>Preview</h2>
-        <p>{text.length>0? text : 'Enter something above in textarea to preview'}</p>
+        <p>{text.length>0? text : 'Nothing to preview'}</p>
         </div>
         </>
     )
